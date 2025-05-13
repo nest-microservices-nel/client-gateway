@@ -16,3 +16,5 @@ steps:
         "push",
         "southamerica-east1-docker.pkg.dev/microservices-nats-nest/images-register-docker/client-gateway-prod",
       ]
+options:
+  logging: CLOUD_LOGGING_ONLY
