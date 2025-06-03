@@ -1,77 +1,246 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# 🚪 Client Gateway - NestJS Microservices
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This is the **Client Gateway** built with [NestJS](https://nestjs.com/).  
+It serves as the main entry point and API gateway for the entire microservices architecture, handling HTTP requests and routing them to appropriate microservices via NATS messaging.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+> ⚠️ **Important Notes:**  
+> - This gateway exposes **HTTP/HTTPS endpoints** and communicates with microservices using **NATS**.
+> - All business logic is handled by individual microservices; this gateway only routes requests.
+> - Includes authentication and authorization middleware for protected routes.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+---
 
-## Installation
+## 📚 Table of Contents
 
-```bash
-$ npm install
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Project Structure](#-project-structure)
+- [Installation](#-installation)
+- [Environment Variables](#-environment-variables)
+- [Running with Docker](#-running-with-docker)
+- [API Endpoints](#-api-endpoints)
+- [Microservices Communication](#-microservices-communication)
+- [Authentication](#-authentication)
+- [Additional Notes](#-additional-notes)
+- [License](#-license)
+
+---
+
+## 🚀 Features
+
+- **API Gateway** for microservices architecture
+- **Products Management** - CRUD operations for products
+- **Orders Management** - Complete order lifecycle management
+- **User Authentication** - Registration, login, and JWT verification
+- **Health Check** endpoint for monitoring
+- **NATS-based** communication with microservices
+- **Global Exception Handling** for microservice errors
+- **Input Validation** with DTOs and class-validator
+- **JWT Authentication Guard** for protected routes
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology | Description                                |
+|------------|--------------------------------------------|
+| NestJS     | Backend framework for Node.js              |
+| TypeScript | Main language of the project               |
+| NATS       | Message broker for microservice messaging  |
+| JWT        | Authentication and authorization           |
+| Class Validator | DTO validation and transformation     |
+| RxJS       | Reactive programming for async operations   |
+
+---
+
+## 📁 Project Structure
+
+```
+src/
+├── auth/                # Authentication module (login, register, verify)
+│   ├── decorators/      # Custom decorators (@User, @Token)
+│   ├── dto/            # Authentication DTOs
+│   ├── guard/          # JWT authentication guard
+│   └── interfaces/     # User interfaces
+├── products/           # Products module (CRUD operations)
+│   └── dto/            # Product DTOs
+├── orders/             # Orders module (order management)
+│   ├── dto/            # Order DTOs
+│   └── enum/           # Order status enums
+├── health-check/       # Health check endpoint
+├── transports/         # NATS module configuration
+├── common/             # Shared utilities, DTOs, and exception filters
+├── config/             # Environment config and validation
+└── main.ts             # Entry point of the application
 ```
 
-## Running the app
+---
+
+## 📦 Installation
+
+To run the gateway locally:
+
+1. **Clone the repository**
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+git clone https://github.com/nest-microservices-nel/client-gateway.git
+cd client-gateway
 ```
 
-## Test
+2. **Install dependencies**
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm install
 ```
 
-## Support
+3. **Set up environment variables**
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Create a `.env` file in the root directory with the following content:
 
-## Stay in touch
+```env
+PORT=3000
+NATS_SERVERS=nats://nats-server:4222
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+4. **Run in development mode**
 
-## License
+```bash
+npm run start:dev
+```
 
-Nest is [MIT licensed](LICENSE).
+---
 
-## CREATE CUSTOM IMAGE
+## 🔐 Environment Variables
 
-docker build -f dockerfile.prod --no-cache -t client-gateway-prod:2.0 ./
+| Variable        | Description                                     | Example                    |
+|----------------|-------------------------------------------------|----------------------------|
+| `PORT`         | Port where the gateway will run                 | `3000`                     |
+| `NATS_SERVERS` | NATS server URLs (comma-separated for multiple) | `nats://nats-server:4222`  |
+
+---
+
+## 🐳 Running with Docker
+
+### Step 1: Build the Docker image
+
+```bash
+docker build -t client-gateway .
+```
+
+### Step 2: Run the container
+
+```bash
+docker run -p 3000:3000 \
+  -e PORT=3000 \
+  -e NATS_SERVERS=nats://nats-server:4222 \
+  client-gateway
+```
+
+### Step 3: Build production image
+
+```bash
+docker build -f dockerfile.prod --no-cache -t client-gateway-prod ./
+```
+
+---
+
+## 🔗 API Endpoints
+
+### Health Check
+| Method | Path | Description | Authentication |
+|--------|------|-------------|----------------|
+| GET    | `/`  | Service health check | No |
+
+### Authentication Routes
+| Method | Path              | Description                    | Authentication |
+|--------|-------------------|--------------------------------|----------------|
+| POST   | `/api/auth/register` | Register a new user         | No             |
+| GET    | `/api/auth/login`    | User login                  | No             |
+| GET    | `/api/auth/verify`   | Verify JWT token            | Yes (Bearer)   |
+
+### Products Routes
+| Method | Path                    | Description                    | Authentication |
+|--------|-------------------------|--------------------------------|----------------|
+| POST   | `/api/products`         | Create a new product           | No             |
+| GET    | `/api/products`         | Get paginated list of products | No             |
+| GET    | `/api/products/:id`     | Get product by ID              | No             |
+| PATCH  | `/api/products/:id`     | Update product by ID           | No             |
+| DELETE | `/api/products/:id`     | Delete product by ID           | No             |
+
+### Orders Routes
+| Method | Path                     | Description                      | Authentication |
+|--------|--------------------------|----------------------------------|----------------|
+| POST   | `/api/orders`            | Create a new order               | No             |
+| GET    | `/api/orders`            | Get paginated list of orders     | No             |
+| GET    | `/api/orders/id/:id`     | Get order by ID (UUID)           | No             |
+| PATCH  | `/api/orders/:id`        | Change order status              | No             |
+| GET    | `/api/orders/:status`    | Get orders filtered by status    | No             |
+
+**Order Status Values:**
+- `PENDING`
+- `DELIVERED` 
+- `CANCELLED`
+
+---
+
+## 📡 Microservices Communication
+
+The gateway communicates with the following microservices via NATS:
+
+### Products Microservice
+| NATS Pattern            | HTTP Route              | Description          |
+|-------------------------|-------------------------|----------------------|
+| `create_product`        | `POST /api/products`    | Create product       |
+| `find_all_products`     | `GET /api/products`     | List products        |
+| `find_one_product`      | `GET /api/products/:id` | Get product by ID    |
+| `update_product`        | `PATCH /api/products/:id` | Update product     |
+| `delete_product`        | `DELETE /api/products/:id` | Delete product    |
+
+### Orders Microservice
+| NATS Pattern            | HTTP Route                | Description            |
+|-------------------------|---------------------------|------------------------|
+| `createOrder`           | `POST /api/orders`        | Create order           |
+| `findAllOrders`         | `GET /api/orders`         | List orders            |
+| `findOneOrder`          | `GET /api/orders/id/:id`  | Get order by ID        |
+| `changeOrderStatus`     | `PATCH /api/orders/:id`   | Change order status    |
+| `findAllByStatus`       | `GET /api/orders/:status` | Filter orders by status |
+
+### Auth Microservice
+| NATS Pattern            | HTTP Route               | Description           |
+|-------------------------|--------------------------|-----------------------|
+| `auth.register.user`    | `POST /api/auth/register` | Register user        |
+| `auth.login.user`       | `GET /api/auth/login`     | Login user           |
+| `auth.verify.user`      | `GET /api/auth/verify`    | Verify JWT token     |
+
+---
+
+## 🔐 Authentication
+
+The gateway includes JWT-based authentication:
+
+---
+
+## 📌 Additional Notes
+
+- **Global Prefix**: All routes (except health check) are prefixed with `/api`
+- **Exception Handling**: Custom RPC exception filter handles microservice errors
+- **Validation**: Global validation pipes with whitelist and forbidden non-whitelisted properties
+- **CORS**: Configure as needed for your frontend applications
+- **Logging**: Comprehensive logging for debugging and monitoring
+- **Scalability**: Stateless design allows horizontal scaling
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**.
+
+---
+
+## 🤝 Author
+
+**Nelson G.**  
+[GitHub](https://github.com/nelsin-06)  
+[LinkedIn](https://www.linkedin.com/in/nelson-gallego-tec-dev)
